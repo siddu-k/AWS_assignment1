@@ -1,11 +1,23 @@
 version: '3.8'
 
 services:
-  tuteduce_ec2:
-    build: .
-    container_name: tuteduce_ec2
+  backend:
+    build: ./backend
+    container_name: backend
     ports:
-      - "5000:5000"   # main app port
+      - "5000:5000"
+    networks:
+      - app-network
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - API_URL=http://backend:5000
+    depends_on:
+      - backend
     networks:
       - app-network
 
